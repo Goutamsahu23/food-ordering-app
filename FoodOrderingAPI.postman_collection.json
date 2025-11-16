@@ -1,0 +1,417 @@
+{
+  "info": {
+    "name": "Food Ordering API Tests",
+    "_postman_id": "0000-0000-0000-0000",
+    "description": "Collection of API test cases for the food-ordering app backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login as Admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"nick@shield.com\", \"password\": \"nickpass\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api","auth","login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login as Manager (India)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"captain.marvel@shield.com\", \"password\": \"capmarvel\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","auth","login" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login as Member (India)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"thanos@shield.com\", \"password\": \"thanos\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","auth","login" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login as Manager (America)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"captain.america@shield.com\", \"password\": \"capamerica\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","auth","login" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login as Member (America)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"email\": \"travis@shield.com\", \"password\": \"travis\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","auth","login" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User Info (Any Authenticated)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/test/me",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","test","me" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Admin-only Endpoint (Expect Success)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/test/admin",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","test","admin" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Admin-only Endpoint (Expect Forbidden for Manager)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{mgrIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/test/admin",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","test","admin" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Restaurants (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/restaurants",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","restaurants" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Restaurants (Manager India)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{mgrIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/restaurants",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","restaurants" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Restaurant + Menu (India Restaurant by Member)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{memIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/restaurants/{{indiaRestaurantId}}",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","restaurants","{{indiaRestaurantId}}" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Restaurant + Menu (Expect Forbidden when wrong country)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{memIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/restaurants/{{usRestaurantId}}",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","restaurants","{{usRestaurantId}}" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Restaurant (Admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"name\": \"New Admin Rest\", \"address\": \"Delhi\", \"country\": \"India\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/restaurants",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","restaurants" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add Menu Item (Admin)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"name\": \"New Dish\", \"description\": \"Yummy\", \"price\": 5.5 }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/restaurants/{{indiaRestaurantId}}/menu",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","restaurants","{{indiaRestaurantId}}","menu" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Order (Member India)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{memIndiaToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"items\": [ { \"name\": \"Butter Chicken\", \"qty\": 1, \"price\": 8.99 }, { \"name\": \"Paneer Tikka\", \"qty\": 2, \"price\": 6.5 } ] }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/create",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders","create" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Attempt Place Order (Member India) → Expect Forbidden",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{memIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/{{orderId}}/place",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders","{{orderId}}","place" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Place Order (Manager India)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{mgrIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/{{orderId}}/place",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders","{{orderId}}","place" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Cancel Order (Manager India)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{mgrIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/{{orderId}}/cancel",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders","{{orderId}}","cancel" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Orders (Admin)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Orders (Manager India)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{mgrIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single Order (Member India)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{memIndiaToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","orders","{{orderId}}" ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Payment Method (Admin)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"type\": \"card\", \"details\": \"{ \\\"last4\\\": \\\"4242\\\", \\\"brand\\\": \\\"VISA\\\" }\" }"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/payments/user/{{userIdForPayment}}",
+          "host": [ "{{baseUrl}}" ],
+          "path": [ "api","payments","user","{{userIdForPayment}}" ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// no pre-request script"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [
+          "// no global tests"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3001" },
+    { "key": "adminToken", "value": "" },
+    { "key": "mgrIndiaToken", "value": "" },
+    { "key": "memIndiaToken", "value": "" },
+    { "key": "mgrUsToken", "value": "" },
+    { "key": "memUsToken", "value": "" },
+    { "key": "indiaRestaurantId", "value": "" },
+    { "key": "usRestaurantId", "value": "" },
+    { "key": "orderId", "value": "" },
+    { "key": "userIdForPayment", "value": "" }
+  ]
+}
