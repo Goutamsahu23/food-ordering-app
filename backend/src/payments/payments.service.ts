@@ -9,7 +9,11 @@ export class PaymentsService {
   constructor(
     @InjectRepository(PaymentMethod)
     private readonly paymentRepo: Repository<PaymentMethod>,
-  ) {}
+  ) { }
+
+  async findAll() {
+    return this.paymentRepo.find({ order: { createdAt: 'ASC' } });
+  }
 
   async findGlobalAndCountry(country?: string | null) {
     try {

@@ -14,8 +14,8 @@ export class PaymentMethod {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'enum', enum: PaymentType })
-  type!: PaymentType;
+   @Column({ type: 'text' })
+  type!: string;
 
   @Column({ type: 'jsonb' })
   details!: any;

@@ -15,13 +15,27 @@ interface AuthRequest extends Request {
 
 @Controller('payments')
 export class PaymentsController {
-  constructor(private readonly paymentsService: PaymentsService) {}
+  constructor(private readonly paymentsService: PaymentsService) { }
 
   // anyone authenticated can GET global methods
   @UseGuards(JwtAuthGuard)
   @Get()
   async getAll(@Req() req: AuthRequest) {
-    const country = req.user?.country ?? null;
+    const user = req.user;
+
+    // Admins see everything
+    if (user?.role === 'admin') {
+      const all = await this.paymentsService.findAll();
+      return {
+        success: true,
+        message: 'Payment methods fetched successfully.',
+        count: all.length,
+        data: all,
+      };
+    }
+
+    // Non-admins: global + country-specific
+    const country = user?.country ?? null;
     const data = await this.paymentsService.findGlobalAndCountry(country);
     return {
       success: true,
