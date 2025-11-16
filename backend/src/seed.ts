@@ -12,12 +12,12 @@ async function run() {
   const restaurantsService = appContext.get(RestaurantsService);
 
   const seedUsers = [
-    // { email: 'nick@shield.com', passwordHash: 'nickpass', role: 'admin', country: 'India' },
-    // { email: 'captain.marvel@shield.com', passwordHash: 'capmarvel', role: 'manager', country: 'India' },
-    // { email: 'captain.america@shield.com', passwordHash: 'capamerica', role: 'manager', country: 'America' },
-    // { email: 'thanos@shield.com', passwordHash: 'thanos', role: 'member', country: 'India' },
-    // { email: 'thor@shield.com', passwordHash: 'thor', role: 'member', country: 'India' },
-    // { email: 'travis@shield.com', passwordHash: 'travis', role: 'member', country: 'America' },
+    { email: 'nick@shield.com', passwordHash: 'password', role: 'admin', country: 'India' },
+    { email: 'captain.marvel@shield.com', passwordHash: 'password', role: 'manager', country: 'India' },
+    { email: 'captain.america@shield.com', passwordHash: 'password', role: 'manager', country: 'America' },
+    { email: 'thanos@shield.com', passwordHash: 'password', role: 'member', country: 'India' },
+    { email: 'thor@shield.com', passwordHash: 'password', role: 'member', country: 'India' },
+    { email: 'travis@shield.com', passwordHash: 'password', role: 'member', country: 'America' },
 
 
     { email: 'nick.admin@shield.com', passwordHash: 'password', role: 'admin', country: 'India' },
