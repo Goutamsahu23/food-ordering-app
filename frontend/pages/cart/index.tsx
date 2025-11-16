@@ -66,6 +66,7 @@ export default function CartPage() {
   const dispatch = useAppDispatch();
   const items = useAppSelector(s => s.cart.items);
   const user = useAppSelector(s => s.auth.user);
+  const restaurantId = useAppSelector(s => s.cart.restaurantId);
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderStatus, setOrderStatus] = useState<string | null>(null);
@@ -84,38 +85,49 @@ export default function CartPage() {
   const total = items.reduce((s, i) => s + i.price * i.qty, 0);
 
   async function createOrder() {
-    setError(null); setMessage(null);
-    if (items.length === 0) { setError('Cart is empty'); return; }
+    setError(null);
+    setMessage(null);
+
+    if (items.length === 0) return setError('Cart is empty');
+
+    if (!restaurantId) return setError('Restaurant not selected');
+
     setLoading(true);
+
     try {
-      const res = await api.post('/orders/create', { items: items.map(i => ({ name: i.name, qty: i.qty, price: i.price })) });
-      setOrderId(res.data.id);
-      setOrderStatus(res.data.status || 'draft');
-      setMessage('Order created. Select payment method to place.');
+      const res = await api.post('/orders/create', {
+        restaurantId,
+        items: items.map(i => ({
+          name: i.name,
+          qty: i.qty,
+          price: i.price
+        }))
+      });
 
-      // --- normalize payment methods response ---
-      const paymentsResp = await api.get('/payments').catch(() => ({ data: [] }));
-      let pms: any = paymentsResp.data;
+      setOrderId(res.data.data?.id || res.data.id);
+      setOrderStatus(res.data.data?.status || 'draft');
+      setMessage(res.data.message || 'Order created. Select payment method.');
 
-      // If API returned wrapper { success, message, data }
-      if (pms && typeof pms === 'object' && !Array.isArray(pms)) {
-        if (Array.isArray(pms.data)) {
-          pms = pms.data;
-        } else {
-          // unknown shape -> fallback to empty array
-          pms = [];
-        }
-      }
+      // fetch pms safely
+      const pmRes = await api.get('/payments');
+      const rawPm = pmRes.data;
+      let arr: any[] = [];
 
-      // If API returned the array directly, keep it
-      if (!Array.isArray(pms)) pms = [];
+      if (Array.isArray(rawPm)) arr = rawPm;
+      else if (Array.isArray(rawPm?.data)) arr = rawPm.data;
 
-      setPaymentMethods(pms);
-      if (pms.length === 1) setSelectedPm(pms[0].id);
+      setPaymentMethods(arr);
+
+      if (arr.length === 1) setSelectedPm(arr[0].id);
+
     } catch (e: any) {
       setError(e?.response?.data?.message || 'Failed to create order');
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   }
+
+
 
 
   async function placeOrder() {

@@ -4,6 +4,7 @@ import api from '../lib/api';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addItem } from '../store/slices/cartSlice';
+import { setRestaurantId } from '../store/slices/cartSlice';
 import { motion } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -211,6 +212,7 @@ export default function IndexPage() {
                           initial="rest"
                           whileTap="pressed"
                           onClick={() => {
+                            dispatch(setRestaurantId(r.id));
                             dispatch(addItem({ name: mi.name, price: Number(mi.price), qty: 1 }));
                             toast.success(`"${mi.name}" added to cart!`);
                           }}

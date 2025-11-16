@@ -6,6 +6,7 @@ import { Order } from './order.entity';
 import { OrderItem } from './order-item.entity';
 import { Role } from '../users/user.entity';
 import { PaymentMethod } from '../payments/payment-method.entity';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -13,20 +14,28 @@ export class OrdersService {
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     @InjectRepository(OrderItem) private itemRepo: Repository<OrderItem>,
     @InjectRepository(PaymentMethod) private pmRepo: Repository<PaymentMethod>,
-  ) {}
+  ) { }
 
   // create order - allowed for all roles; order.country = user.country
-  async createOrder(user: any, dto: { items: { name: string; qty: number; price: number }[] }) {
+  async createOrder(user: any, dto: CreateOrderDto) {
     const total = dto.items.reduce((s, i) => s + Number(i.price) * i.qty, 0);
+
     const order = this.orderRepo.create({
       userId: user.id,
+      restaurantId: dto.restaurantId,
       country: user.country,
       total,
       status: 'draft',
-      items: dto.items.map(i => ({ name: i.name, qty: i.qty, price: i.price } as Partial<OrderItem>)),
-    } as Partial<Order>);
+      items: dto.items.map(i => ({
+        name: i.name,
+        qty: i.qty,
+        price: i.price
+      }))
+    });
+
     return this.orderRepo.save(order);
   }
+
 
   // find orders for user (admin gets all)
   async findForUser(user: any) {

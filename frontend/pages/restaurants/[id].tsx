@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import api from '../../lib/api';
 import { useAppDispatch } from '../../store/hooks';
 import { addItem } from '../../store/slices/cartSlice';
+import { setRestaurantId } from '../../store/slices/cartSlice';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ToastContainer, toast } from 'react-toastify';
@@ -54,10 +55,14 @@ export default function RestaurantPage() {
     if (!id) return;
     setLoading(true);
     api.get(`/restaurants/${id}`)
-      .then((r) => setRest(r.data))
-      .catch(() => setRest(null))
-      .finally(() => setLoading(false));
+  .then((r) => {
+    setRest(r.data);
+    dispatch(setRestaurantId(r.data.id)); 
+  })
+  .catch(() => setRest(null))
+  .finally(() => setLoading(false));
   }, [id]);
+
 
   function changeQty(menuId: string, delta: number) {
     setQtys((prev) => {

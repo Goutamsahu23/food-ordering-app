@@ -19,6 +19,9 @@ export class Order {
   @Column({ default: 'draft' })
   status!: 'draft' | 'placed' | 'cancelled';
 
+  @Column()
+  restaurantId!: string;
+
   @OneToMany(() => OrderItem, (item) => item.order, { cascade: true, eager: true })
   items!: OrderItem[];
 
