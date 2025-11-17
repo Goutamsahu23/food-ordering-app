@@ -27,9 +27,10 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
     try {
-      const res = await api.post('/auth/login', { email, password });
+      // trim email to remove accidental leading/trailing spaces
+      const payload = { email: email.trim(), password };
+      const res = await api.post('/auth/login', payload);
       dispatch(setToken(res.data.access_token));
-      // on success, router will redirect to '/'
     } catch (e: any) {
       setError(e?.response?.data?.message || 'Login failed');
     } finally {
@@ -61,7 +62,12 @@ export default function LoginPage() {
         <form onSubmit={submit} style={{ display: 'grid', gap: 12 }}>
           <div>
             <label className="small">Email</label>
-            <input className="input" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input
+              className="input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => setEmail(prev => prev.trim())}
+            />
           </div>
 
           <div>
