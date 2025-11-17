@@ -1,190 +1,228 @@
 # 🍽️ Food Ordering System — RBAC + Country Access Control
 
-A full-stack **Food Ordering Web Application** built with **Next.js, NestJS, PostgreSQL, TypeORM, and Redux Toolkit**.
+A full-stack Food Ordering Web Application built with **Next.js, NestJS, PostgreSQL, TypeORM, and Redux Toolkit**.
+
+---
 
 ## 🚀 Features
 
-- ✅ **Role-Based Access Control** (Admin, Manager, Member)
-- 🌍 **Country-restricted access** (India / America)
-- 🍽 **Restaurants & Menus** with images, country scope, and fallback images
-- 🛒 **Orders** with cart, payment flow, cancelation
-- 💳 **Admin-only payment method management**
-- 🔐 **JWT Authentication**
-- 🎨 **Modern, animated UI** with CSS + Framer Motion
-- 🧲 **Database seeding** with demo data
+- Role-Based Access Control (Admin, Manager, Member)
+- Country-restricted access (India / America)
+- Restaurants & Menu items with images + fallback
+- Orders (create, place, cancel)
+- Admin-only payment method management
+- JWT Authentication
+- Responsive UI + Framer Motion animations
+- Database seeding with demo data
 
 ---
 
 ## 👥 User Roles
 
-| Role      | Country Scope   | Access                                                                         |
-| --------- | --------------- | ------------------------------------------------------------------------------ |
-| **Admin**   | Global           | Full access (payments, cancel/place orders, manage everything)                 |
-| **Manager** | Own country only | View restaurants, create/place/cancel orders                                  |
-| **Member**  | Own country only | View restaurants, create orders                                               |
+| Role   | Country Scope     | Access Summary                              |
+|--------|--------------------|----------------------------------------------|
+| Admin  | Global             | Full access including payments               |
+| Manager| Own country only   | View restaurants, create/place/cancel orders |
+| Member | Own country only   | View restaurants, create orders              |
 
 ---
 
-## 🌐 Restaurants & Menu
-
-- View all restaurants in your country  
-- Menu items with images  
-- Images link stored in DB (seeded)  
-- Fallback images on frontend  
-
----
-
-## 🛒 Orders
-
-- Add to cart
-- Create order (Member only) 
-- Place order (Admin/Manager only)  
-- Cancel order (Admin/Manager only)  
-
-
----
-
-## 💳 Payments (Admin Only)
-
-- Add payment method  
-- Update payment method  
-- Card, UPI, COD, Wallet, etc.
-
----
-
-## 🔐 Authentication System
-
-- Login with email + password  
-- JWT assigned on login  
-- Frontend auto-decodes token  
-- Protected routes for role-specific pages  
-
----
-
-## 🎨 UI / UX Features
-
-- Clean CSS-based UI  
-- Framer Motion animations  
-- Responsive restaurant grid  
-- Image fallback system  
-- Modern card-based layout  
-
----
-
-# 🏗️ Tech Stack
+## 🏗️ Tech Stack
 
 ### Frontend
-
 - Next.js 14  
 - TypeScript  
 - Redux Toolkit  
 - Axios  
-- Framer Motion  
 - CSS Modules  
+- Framer Motion  
 
 ### Backend
-
 - NestJS  
 - TypeORM  
 - PostgreSQL  
-- JWT Auth  
-- Class Validator / Transformer  
-- bcrypt  
-- Role Guards + Country Guards  
+- JWT Authentication  
+- bcrypt, class-validator  
+- Role Guards + Country Guards
 
 ---
 
----
+# ⚙️ Local Setup
 
-# 🛠️ Setup
+## 1️⃣ Clone the Repository
 
-## 1️⃣ Clone Repo
-
-git clone [**https://github.com/Goutamsahu23/food-ordering-app**](https://github.com/Goutamsahu23/food-ordering-app)
+```bash
+git clone https://github.com/Goutamsahu23/food-ordering-app
 cd food-ordering-app
+```
 
-text
+---
 
-### 🗄️ Backend Setup
+## 🗄️ Backend Setup
 
-2️⃣ **Install dependencies**
+### 1️⃣ Install Dependencies
+
+```bash
 cd backend
 npm install
+```
 
-text
+---
 
-3️⃣ **Environment Variables**  
-Create a `.env` file:
+## 🛢️ Create PostgreSQL Database (Required)
+
+You can create the database using **pgAdmin** or **psql**.
+
+---
+
+### ➊ Create Database using pgAdmin (GUI Method)
+
+#### Step 1: Open pgAdmin
+
+### Step 2: Create the Database
+
+1. Right-click **Databases → Create → Database**  
+2. Set:  
+   - Database Name: `food_db`  
+   - Owner: `postgres`  
+3. Click **Save**
+
+---
+
+### ✅ Done!
+
+Your PostgreSQL database is ready.
+
+---
+
+## Use these in your `.env`:
+
+```env
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
-DB_PASS=yourpassword
-DB_NAME=foodApp
-JWT_SECRET=supersecret
-
-text
-
-5️⃣ **Seed Database**
-npm run seed
-
-text
-
-### Demo Users
-
-| Email                         | Password     | Role    | Country  |
-|-------------------------------|-------------|---------|----------|
-| nick@shield.com               | nickpass    | admin   | India    |
-| captain.marvel@shield.com     | capmarvel   | manager | India    |
-| captain.america@shield.com    | capamerica  | manager | America  |
-| thanos@shield.com             | thanos      | member  | India    |
-| thor@shield.com               | thor        | member  | India    |
-| travis@shield.com             | travis      | member  | America  |
-
-6️⃣ **Start Backend**
-npm run start:dev
-
-text
-- Backend at: [**http://localhost:3001**](http://localhost:3001)
+DB_PASS=your_password_here
+DB_NAME=food_db
+```
 
 ---
 
-### 🌐 Frontend Setup
+## ➋ Create Database using SQL (psql)
 
-1️⃣ **Install dependencies**
-cd frontend
+```sql
+CREATE USER food_user WITH PASSWORD 'your_password_here';
+CREATE DATABASE food_db OWNER food_user;
+GRANT ALL PRIVILEGES ON DATABASE food_db TO food_user;
+```
+
+---
+
+## 🔐 .env Configuration (Backend)
+
+Create a `.env` file inside **backend/**(use this for local setup):
+
+```env
+PORT=3001
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRATION=3600
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=your_password_here
+DB_NAME=food_db
+
+FRONTEND_URL=http://localhost:3000
+```
+
+ For Production setup:
+ ```env
+PORT=3001
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRATION=3600
+
+FRONTEND_URL= Deployed link
+DATABASE_URL= use the external DB pgSql URL 
+```
+
+---
+
+## 🧪 Seed Database
+
+```bash
+npm run seed
+```
+
+---
+
+## ▶️ Start Backend
+
+```bash
+npm run start:dev
+```
+
+Backend runs at:  
+**http://localhost:3001**
+
+---
+
+## 🌐 3️⃣ Frontend Setup
+
+```bash
+cd ../frontend
 npm install
-
-text
-
-2️⃣ **Run frontend**
 npm run dev
+```
 
-text
-- Frontend at: [**http://localhost:3000**](http://localhost:3000)
+## 🔐 .env Configuration (Frontend)
+
+Create a `.env` file inside **FRONTEND/**(use this for local setup):
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3000
+```
+
+ For Production setup:
+ ```env
+NEXT_PUBLIC_API_URL= Use Deployed Backend URL
+```
+
+Frontend runs at:  
+**http://localhost:3000**
+
+---
+
+## 🔢 Demo Users (Seeded)
+
+✔ All passwords have been changed to **password** as requested.
+
+| Email                      | Password | Role    | Country |
+|----------------------------|----------|---------|---------|
+| nick@shield.com            | password | admin   | India   |
+| captain.marvel@shield.com  | password | manager | India   |
+| captain.america@shield.com | password | manager | America |
+| thanos@shield.com          | password | member  | India   |
+| thor@shield.com            | password | member  | India   |
+| travis@shield.com          | password | member  | America |
 
 ---
 
 ## 🎯 RBAC Summary
 
-| Action            | Admin | Manager | Member |
-|-------------------|-------|---------|--------|
-| View restaurants  | ✔     | ✔       | ✔      |
-| Create order      | ✔     | ✔       | ✔      |
-| Place order       | ✔     | ✔       | ❌     |
-| Cancel order      | ✔     | ✔       | ❌     |
-| Update payment    | ✔     | ❌      | ❌     |
+| Action           | Admin | Manager | Member |
+|------------------|:-----:|:-------:|:------:|
+| View restaurants | ✔     | ✔       | ✔      |
+| Create order     | ✔     | ✔       | ✔      |
+| Place order      | ✔     | ✔       | ❌     |
+| Cancel order     | ✔     | ✔       | ❌     |
+| Update payment   | ✔     | ❌      | ❌     |
 
 ---
 
 ## 🌍 Country Access Summary
 
-- **Managers & Members:** See only restaurants, menu items, orders, and payment methods for *their own* country.
-- **Admins:** Unrestricted access.
+### **Manager & Member**
+- Can view restaurants, menus, orders, and payments **only for their own country.**
 
----
-
-## 💡 Notes
-
-- Images are seeded, with frontend fallback images for missing ones.
-- Payments are managed by Admins only .
-- Role/country guards are enforced both on API and frontend routing.
+### **Admin**
+- Has **global access** across all countries.
