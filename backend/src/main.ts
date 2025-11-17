@@ -17,19 +17,18 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Accept, Authorization',
     exposedHeaders: 'Authorization',
   });
-  
+
   // Set global prefix
   app.setGlobalPrefix('api');
 
   // Enable global validation pipe
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // strip unknown properties
-      forbidNonWhitelisted: true, // throw 400 on unknown props
-      transform: true, // auto-transform payloads to DTO instances (enables @Type() usage)
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    transform: true, // important: runs class-transformer transforms
+    forbidNonWhitelisted: false,
+    validationError: { target: false },
+    // disableErrorMessages: true in production if you want to hide details
+  }));
 
   app.useGlobalFilters(new GlobalHttpExceptionFilter());
 
