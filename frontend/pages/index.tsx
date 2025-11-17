@@ -121,7 +121,7 @@ export default function IndexPage() {
         <div className="hero-left">
           <h1>Good food, great teams</h1>
           <p className="small">Order from curated restaurants near your team's country. Quick delivery, easy corporate billing.</p>
-          <div style={{ marginTop: 18, display: 'flex', gap: 12 }}>
+          <div className='h-btns' style={{ marginTop: 18, display: 'flex', gap: 12 }}>
             <Link href="/cart" className="btn btn-primary">View Cart ({cartItems.length})</Link>
             <Link href="/admin/payments" className="btn btn-ghost">Manage Payments</Link>
           </div>
